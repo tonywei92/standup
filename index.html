@@ -187,15 +187,13 @@
             min-height: 300px;
         }
         body.modal-open .preview-box{
-            display: block;
             top:32px;
             width: calc(100% - 40px);
-            
             background: #fff;
             border-radius: 2px;
             box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
             z-index: 100;
-    
+
         }
 
         body.modal-open .overlay{
@@ -235,6 +233,15 @@
             }
             .btn-close-modal{
                 display: none;
+            }
+            body.modal-open .preview-box{
+                top:unset;
+                width: unset;
+                background: #fff;
+                border-radius: 0;
+                box-shadow:unset;
+                z-index: 100;
+
             }
         }
     </style>
