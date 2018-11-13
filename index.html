@@ -18,7 +18,6 @@
         body{
             font-family: "Roboto Slab", Arial,sans-serif;
             font-size: 14px;
-            padding-bottom: 100px;
         }
         h1{
             font-size: 18px;
@@ -35,13 +34,14 @@
             margin:0;
         }
         form{
-            padding: 8px;
-            border-left: 4px solid transparent;
-            transition: all 0.4s;
+            padding: 16px;
+            padding-bottom: 100px;
+            /* border-left: 4px solid transparent; */
+            /* transition: all 0.4s; */
         }
         form:hover{
             box-sizing: content-box;
-            border-left: 4px solid #d81b60;
+            /* border-left: 4px solid #d81b60; */
         }
         .container .row{
             /* padding: 6px 0; */
@@ -53,6 +53,8 @@
         
         .preview-box{
             padding-top: 15px;
+            max-height: 90%;
+            overflow: hidden;
         }
         .preview{
             line-height: 1.4rem;
@@ -63,9 +65,12 @@
         }
 
         .fab{
+            z-index: 200;
             background: #d81b60;
             border-radius: 50%;
-            display: block;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             height: 55px;
             margin: 1rem;
             position: fixed;
@@ -83,32 +88,25 @@
             box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
         }
 
-        .btn-preview-copy{
+        /* .btn-preview-copy{
             display: none;
-        }
+        } */
         .preview p{
                 margin:0;
             }
-         @media(min-width: 576px){
-            .no-padding{
-                padding: 15px;
-            }   
-            .preview-box{
-                padding-top: 20px;
-            }
-            .fab{
-                display: none;
-            }
-            .btn-preview-copy{
-                display: block;
-            }
-          
+        em{
+            opacity: 0.5;
         }
-
+    .modal-control{
+        /* position: relative;
+        bottom:18px; */
+    }
         .speech-wrapper {
             padding-left: 20px;
+            padding-right: 20px;
             margin-top:10px;
-            margin-bottom:20px;
+            padding-bottom:36px;
+            margin-bottom: 18px;
         }
         .speech-wrapper .bubble {
             width: 100%;
@@ -176,21 +174,80 @@
         }
         .speech-wrapper .bubble .bubble-arrow.alt:after {
             transform: rotate(45deg) scaleY(-1);
+        }
+        body .preview-box{
+            position: fixed;
+            top: -150%;
+            transition: 0.4s all;
+            padding-bottom: 15px;
+        }
+        body .preview-box .speech-wrapper{
+            max-height: calc(100vh - 265px);
+            overflow: scroll;
+            min-height: 300px;
+        }
+        body.modal-open .preview-box{
+            display: block;
+            top:32px;
+            width: calc(100% - 40px);
+            
+            background: #fff;
+            border-radius: 2px;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+            z-index: 100;
+    
+        }
 
+        body.modal-open .overlay{
+            background-color: rgba(0, 0, 0,0.5);
+            z-index: 25;
+            width: 100%;
+            height: 100%;
+            position: fixed;
+        }
+        .btn-close-modal{
+            /* position: absolute; */
         }
         .btn{
-            display: inline-block;
+            margin-left: 3px;
+            margin-right: 3px;
+        }
+        @media(min-width: 576px){
+            .no-padding{
+                padding: 15px;
+            }   
+            .preview-box{
+                padding-top: 20px;
+            }
+            .fab{
+                display: none;
+            }
+            .overlay{
+                display: none;
+            }
+            body .preview-box{
+                position: relative;
+            }
+            body .preview-box .speech-wrapper{
+                max-height:none;
+                overflow:visible;
+                min-height:unset;
+            }
+            .btn-close-modal{
+                display: none;
+            }
         }
     </style>
 </head>
 
 <body>
+    <div class="overlay btn-generate"></div>
     <nav>
         <div class="title">
             <h1>Standup Report Generator</h1>
         </div>
     </nav>
-    
+
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-12 col-md-6 col-lg-4 no-padding data-input">
@@ -205,22 +262,22 @@
                     </div>
                     <div class="form-group">
                         <label for="past-content">What did you do:</label>
-                        <textarea class="form-control" name="" id="past-content" cols="30" rows="5"></textarea>
+                        <textarea class="form-control" name="" id="past-content" cols="30" rows="6"></textarea>
                     </div>
                     <div class="form-group">
                         <label for="obstacle">Obstacle:</label>
-                        <textarea class="form-control" name="" id="obstacle" cols="30" rows="5"></textarea>
+                        <textarea class="form-control" name="" id="obstacle" cols="30" rows="6"></textarea>
                     </div>
                     <div class="form-group">
                         <label for="today-content">What will you do today:</label>
-                        <textarea class="form-control" name="" id="today-content" cols="30" rows="5"></textarea>
+                        <textarea class="form-control" name="" id="today-content" cols="30" rows="6"></textarea>
                     </div>
                     <div class="form-group">
                         <label for="today-target">Target today:</label>
-                        <textarea class="form-control" name="" id="today-target" cols="30" rows="5"></textarea>
+                        <textarea class="form-control" name="" id="today-target" cols="30" rows="6"></textarea>
                     </div>
                 </form>
-                <hr />
+                <hr class="d-none d-md-block"/>
             </div>
             <div class="col-12 col-md-6 col-lg-4 preview-box">
                 <div class="row">
@@ -231,31 +288,30 @@
                 <div class="row">
                     <div class="col">
 
-                            <div class="speech-wrapper">
-                                <div class="bubble alt">
-                                    <div class="txt">
-                                        <p class="name alt">+353 87 1234 567<span> ~ <span class="name"></span></span></p>
-                                        <div class="message preview">
+                        <div class="speech-wrapper">
+                            <div class="bubble alt">
+                                <div class="txt">
+                                    <p class="name alt">+353 87 1234 567<span> ~ <span class="name"></span></span></p>
+                                    <div class="message preview">
                                         <i>No preview</i>
-                                        </div>
-                                        <span class="timestamp"><span class="time"></span></span>
                                     </div>
-                                    <div class="bubble-arrow alt"></div>
+                                    <span class="timestamp"><span class="time"></span></span>
                                 </div>
+                                <div class="bubble-arrow alt"></div>
                             </div>
-
+                        </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row modal-control">
                     <div class="col text-right">
-                        <button class="btn btn-success btn-copy btn-preview-copy">Copy</button>
+                        <button class="btn btn-success btn-copy btn-preview-copy">Copy</button><div class="btn btn-info btn-close-modal btn-generate">Close</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <button class="fab btn-copy">
-        <i class="fa fa-clone" aria-hidden="true"></i>
+    <button class="fab btn-generate">
+        <i class="fa fa-play" aria-hidden="true"></i>
     </button>
 
     <!-- Optional JavaScript -->
@@ -278,8 +334,14 @@
     var $todayTarget = $('.data-input #today-target');
     var $chatName = $('span.name');
     var $chatTime = $('span.time');
+    var $btnGenerate = $('.btn-generate');
 
-    setInterval(function(){
+    $btnGenerate.on('click', function(e){
+        e.preventDefault();
+        $('body').toggleClass('modal-open');
+    });
+
+    setInterval(function () {
         var d = new Date();
         $chatTime.text(d.getHours() + ':' + d.getMinutes());
     }, 1000);
@@ -298,7 +360,7 @@
             str += '- Yesterday:<br />';
         }
         else {
-            str += 'On ' + $pastOn.val() + ':'
+            str += '- On ' + $pastOn.val() + ':'
         }
 
         if ($pastContent.val() === '') {
@@ -341,11 +403,11 @@
         text = text.replace(new RegExp('</strong>', 'g'), "*");
         text = text.replace(new RegExp('<em>', 'g'), "_");
         text = text.replace(new RegExp('</em>', 'g'), "_");
-        text = text.replace(new RegExp('<p>','g'), "");
-        text = text.replace(new RegExp('</p>','g'), '\n');
-        text = text.replace(new RegExp('<br />','g'), '\n');
+        text = text.replace(new RegExp('<p>', 'g'), "");
+        text = text.replace(new RegExp('</p>', 'g'), '\n');
+        text = text.replace(new RegExp('<br />', 'g'), '\n');
         var parser = new DOMParser;
-        var dom = parser.parseFromString(text,'text/html');
+        var dom = parser.parseFromString(text, 'text/html');
         var text = dom.body.textContent;
         var $temp = $("<textarea>");
         $("body").append($temp);
@@ -358,7 +420,7 @@
         e.preventDefault();
         copy(str);
     });
-   
+
 
 </script>
 
