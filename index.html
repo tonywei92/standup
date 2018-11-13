@@ -57,7 +57,7 @@
         .preview{
             padding: 10px;
             margin-bottom: 10px;
-            background-color: #ffebee;
+            /*background-color: #ffebee;*/
             width: 100%;
         }
 
@@ -102,6 +102,84 @@
                 display: block;
             }
           
+        }
+
+
+        .speech-wrapper {
+            padding-left: 20px;
+            margin-top:10px;
+            margin-bottom:20px;
+        }
+        .speech-wrapper .bubble {
+            width: 100%;
+            height: auto;
+            display: block;
+            background: #f5f5f5;
+            border-radius: 4px;
+            box-shadow: 2px 8px 5px #000;
+            position: relative;
+            margin: 0 0 25px;
+        }
+        .speech-wrapper .bubble.alt {
+            margin: 0 0 0 0px;
+        }
+        .speech-wrapper .bubble .txt {
+            padding: 8px 55px 8px 14px;
+        }
+        .speech-wrapper .bubble .txt .name {
+            font-weight: 600;
+            font-size: 12px;
+            margin: 0 0 4px;
+            color: #3498db;
+        }
+        .speech-wrapper .bubble .txt .name span {
+            font-weight: normal;
+            color: #b3b3b3;
+        }
+        .speech-wrapper .bubble .txt .name.alt {
+            color: #2ecc71;
+        }
+        .speech-wrapper .bubble .txt .message {
+            font-size: 12px;
+            margin: 0;
+            color: #2b2b2b;
+        }
+        .speech-wrapper .bubble .txt .timestamp {
+            font-size: 11px;
+            position: absolute;
+            bottom: 8px;
+            right: 10px;
+            text-transform: uppercase;
+            color: #999;
+        }
+        .speech-wrapper .bubble .bubble-arrow {
+            position: absolute;
+            width: 0;
+            bottom: 42px;
+            left: -16px;
+            height: 0;
+        }
+        .speech-wrapper .bubble .bubble-arrow.alt {
+            right: -2px;
+            bottom: 40px;
+            left: auto;
+        }
+        .speech-wrapper .bubble .bubble-arrow:after {
+            content: "";
+            position: absolute;
+            border: 0 solid transparent;
+            border-top: 9px solid #f5f5f5;
+            border-radius: 0 20px 0;
+            width: 15px;
+            height: 30px;
+            transform: rotate(145deg);
+        }
+        .speech-wrapper .bubble .bubble-arrow.alt:after {
+            transform: rotate(45deg) scaleY(-1);
+
+        }
+        .btn{
+            display: inline-block;
         }
     </style>
 </head>
@@ -152,13 +230,24 @@
                 </div>
                 <div class="row">
                     <div class="col">
-                        <div class="preview">
-                            <i>No preview</i>
-                        </div>
+
+                            <div class="speech-wrapper">
+                                <div class="bubble alt">
+                                    <div class="txt">
+                                        <p class="name alt">+353 87 1234 567<span> ~ <span class="name"></span></span></p>
+                                        <div class="message preview">
+                                        <i>No preview</i>
+                                        </div>
+                                        <span class="timestamp"><span class="time"></span></span>
+                                    </div>
+                                    <div class="bubble-arrow alt"></div>
+                                </div>
+                            </div>
+
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col">
+                    <div class="col text-right">
                         <button class="btn btn-success btn-copy btn-preview-copy">Copy</button>
                     </div>
                 </div>
@@ -187,8 +276,16 @@
     var $pastContent = $('.data-input #past-content');
     var $todayContent = $('.data-input #today-content');
     var $todayTarget = $('.data-input #today-target');
+    var $chatName = $('span.name');
+    var $chatTime = $('span.time');
+
+    setInterval(function(){
+        var d = new Date();
+        $chatTime.text(d.getHours() + ':' + d.getMinutes());
+    }, 1000);
 
     $('.data-input').on('keyup', '.form-input', function (e) {
+        $chatName.text($name.val());
         str = '';
         if ($name.val() === '') {
             str += '<em>Name not specified</em><br />';
@@ -198,7 +295,7 @@
         }
 
         if ($pastOn.val() === '') {
-            str += '&#8226; Yesterday:<br />';
+            str += '- Yesterday:<br />';
         }
         else {
             str += 'On ' + $pastOn.val() + ':'
@@ -211,7 +308,7 @@
             str += '<p>' + $pastContent.val() + '</p>'
         }
 
-        str += '&#8226; Obstacle:<br />';
+        str += '- Obstacle:<br />';
 
         if ($obstacle.val() === '') {
             str += '<p><em>none</em></p>';
@@ -220,7 +317,7 @@
             str += '<p>' + $obstacle.val() + '</p>'
         }
 
-        str += '&#8226; Today:<br />';
+        str += '- Today:<br />';
         if ($todayContent.val() === '') {
             str += '<p><em>none</em></p>';
         }
@@ -228,7 +325,7 @@
             str += '<p>' + $todayContent.val() + '</p>'
         }
 
-        str += '&#8226; Target:<br />';
+        str += '- Target:<br />';
         if ($todayTarget.val() === '') {
             str += '<p><em>none</em></p>';
         }
