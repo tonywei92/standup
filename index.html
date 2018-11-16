@@ -354,6 +354,7 @@
     }, 1000);
 
     $('.data-input').on('keyup', '.form-input', function (e) {
+        var tempStr = '';
         $chatName.text($name.val());
         str = '';
         if ($name.val() === '') {
@@ -364,42 +365,58 @@
         }
 
         if ($pastOn.val() === '') {
-            str += '&bull; Yesterday:<br />';
+            str += 'Yesterday:<br />';
         }
         else {
-            str += '&bull; On ' + $pastOn.val() + ':'
+            str += 'On ' + $pastOn.val() + ':<br />'
         }
 
         if ($pastContent.val() === '') {
             str += '<p><em>none</em></p>';
         }
         else {
-            str += '<p>' + $pastContent.val() + '</p>'
+            tempStr = '';
+            $.each($pastContent.val().split("\n"), function (index, item){
+                tempStr += '<p>&bull; ' + item + '</p>';
+            });
+            str += tempStr; 
         }
 
-        str += '&bull; Obstacle:<br />';
+        str += '<br />Obstacle:<br />';
 
         if ($obstacle.val() === '') {
             str += '<p><em>none</em></p>';
         }
         else {
-            str += '<p>' + $obstacle.val() + '</p>'
+            tempStr = '';
+            $.each($obstacle.val().split("\n"), function (index, item){
+                tempStr += '<p>&bull; ' + item + '</p>';
+            });
+            str += tempStr; 
         }
 
-        str += '&bull; Today:<br />';
+        str += '<br />Today:<br />';
         if ($todayContent.val() === '') {
             str += '<p><em>none</em></p>';
         }
         else {
-            str += '<p>' + $todayContent.val() + '</p>'
+            tempStr = '';
+            $.each($todayContent.val().split("\n"), function (index, item){
+                tempStr += '<p>&bull; ' + item + '</p>';
+            });
+            str += tempStr; 
         }
 
-        str += '&bull; Target:<br />';
+        str += '<br />Target:<br />';
         if ($todayTarget.val() === '') {
             str += '<p><em>none</em></p>';
         }
         else {
-            str += '<p>' + $todayTarget.val() + '</p>'
+            tempStr = '';
+            $.each($todayTarget.val().split("\n"), function (index, item){
+                tempStr += '<p>&bull; ' + item + '</p>';
+            });
+            str += tempStr; 
         }
         str = str.replace(new RegExp("\n", 'g'), "<br />");
         $preview.html(str);
