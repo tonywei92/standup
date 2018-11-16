@@ -364,10 +364,10 @@
         }
 
         if ($pastOn.val() === '') {
-            str += '- Yesterday:<br />';
+            str += '&bull; Yesterday:<br />';
         }
         else {
-            str += '- On ' + $pastOn.val() + ':'
+            str += '&bull; On ' + $pastOn.val() + ':'
         }
 
         if ($pastContent.val() === '') {
@@ -377,7 +377,7 @@
             str += '<p>' + $pastContent.val() + '</p>'
         }
 
-        str += '- Obstacle:<br />';
+        str += '&bull; Obstacle:<br />';
 
         if ($obstacle.val() === '') {
             str += '<p><em>none</em></p>';
@@ -386,7 +386,7 @@
             str += '<p>' + $obstacle.val() + '</p>'
         }
 
-        str += '- Today:<br />';
+        str += '&bull; Today:<br />';
         if ($todayContent.val() === '') {
             str += '<p><em>none</em></p>';
         }
@@ -394,7 +394,7 @@
             str += '<p>' + $todayContent.val() + '</p>'
         }
 
-        str += '- Target:<br />';
+        str += '&bull; Target:<br />';
         if ($todayTarget.val() === '') {
             str += '<p><em>none</em></p>';
         }
